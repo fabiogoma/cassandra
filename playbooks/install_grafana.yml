@@ -2,9 +2,13 @@
 - name: Grafana initial setup
   hosts: monitoring
   become: true
-  gather_facts: true
+  gather_facts: false
 
   tasks:
-    - name: Import grafana role
+    - name: Import CollectD role
+      import_role:
+        name: collectd
+
+    - name: Import Grafana role
       import_role:
         name: grafana

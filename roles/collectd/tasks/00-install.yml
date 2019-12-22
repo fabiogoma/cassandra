@@ -1,0 +1,8 @@
+---
+- name: Install CollectD
+  yum:
+    name: collectd
+    enablerepo: epel
+  register: install_packages
+  until: install_packages is not failed
+  retries: 5

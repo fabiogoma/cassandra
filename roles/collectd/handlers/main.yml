@@ -1,0 +1,7 @@
+---
+- name: Reload systemd configuration and restart CollectD
+  systemd:
+    name: collectd
+    state: restarted
+    enabled: true
+    daemon_reload: true

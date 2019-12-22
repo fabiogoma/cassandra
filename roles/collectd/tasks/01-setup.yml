@@ -1,0 +1,16 @@
+---
+- name: Setup CollectD
+  copy:
+    src: collectd.conf
+    dest: /etc/collectd.d/collectd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload systemd configuration and restart CollectD
+
+- name: Ensure CollectD is up
+  systemd:
+    name: collectd
+    state: started
+    enabled: true
+    daemon_reload: true
