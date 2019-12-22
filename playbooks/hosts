@@ -12,4 +12,4 @@ brazil
 amsterdam
 
 [monitoring]
-grafana.example.com
+grafana.example.com                 ansible_user=centos
