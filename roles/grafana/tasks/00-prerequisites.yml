@@ -1,0 +1,77 @@
+---
+- name: Add yum repositories
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    file: "{{ item.file }}"
+    baseurl: "{{ item.baseurl }}"
+    gpgcheck: no
+  loop:
+    - { name: 'grafana', description: 'Grafana YUM Repository', file: 'grafana', baseurl: 'https://packages.grafana.com/oss/rpm'}
+    - { name: 'influxdb', description: 'InfluxDB YUM Repository', file: 'influxdb', baseurl: 'https://repos.influxdata.com/rhel/\$releasever/\$basearch/stable'}
+
+- name: Install dependecies
+  yum:
+    name:
+      - mlocate
+      - bash-completion
+      - NetworkManager
+      - lvm2
+      - firewalld
+      - wget
+      - unzip
+      - initscripts
+      - urw-fonts
+      - epel-release
+    state: latest
+  register: install_dependecies_packages
+  until: install_dependecies_packages is not failed
+  retries: 5
+
+- name: Put services on desired state
+  systemd:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    enabled: "{{ item.enabled }}"
+  loop:
+    - { name: 'NetworkManager', state: 'started', enabled: true }
+    - { name: 'firewalld', state: 'started', enabled: true }
+
+- name: Modify soft and hard limits.
+  pam_limits:
+    domain: "{{ item.username }}"
+    limit_type: '-'
+    limit_item: "{{ item.parameter }}"
+    value: "{{ item.value }}"
+  loop:
+    - { username: 'grafana', parameter: 'memlock', value: 'unlimited' }
+    - { username: 'grafana', parameter: 'nofile', value: '1048576' }
+    - { username: 'grafana', parameter: 'nproc', value: '32768' }
+    - { username: 'grafana', parameter: 'as', value: 'unlimited' }
+    - { username: 'influxd', parameter: 'memlock', value: 'unlimited' }
+    - { username: 'influxd', parameter: 'nofile', value: '1048576' }
+    - { username: 'influxd', parameter: 'nproc', value: '32768' }
+    - { username: 'influxd', parameter: 'as', value: 'unlimited' }
+
+- name: Cloud init template to remove FQDN from /etc/hosts
+  copy:
+    src: hosts.redhat.tmpl
+    dest: /etc/cloud/templates/hosts.redhat.tmpl
+    owner: root
+    group: root
+    mode: 0644
+  register: cloud_init_template_result
+
+- name: Reboot immediately if there was a change.
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when: cloud_init_template_result is changed
+
+- name: Wait for the reboot to complete if there was a change.
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when: cloud_init_template_result is changed

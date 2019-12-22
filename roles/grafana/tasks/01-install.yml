@@ -1,0 +1,9 @@
+---
+- name: Install InfluxDB + Grafana
+  yum:
+    name:
+      - influxdb
+      - grafana
+  register: install_packages
+  until: install_packages is not failed
+  retries: 5

@@ -1,0 +1,3 @@
+---
+- import_tasks: 00-prerequisites.yml
+- import_tasks: 01-install.yml

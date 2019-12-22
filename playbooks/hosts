@@ -10,3 +10,6 @@ cassandra-node[4:6].example.com     ansible_user=centos
 [cassandra:children]
 brazil
 amsterdam
+
+[monitoring]
+grafana.example.com

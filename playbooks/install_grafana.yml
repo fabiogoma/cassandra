@@ -1,0 +1,10 @@
+---
+- name: Grafana initial setup
+  hosts: monitoring
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Import grafana role
+      import_role:
+        name: grafana
