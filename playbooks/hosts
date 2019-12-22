@@ -1,0 +1,12 @@
+[all]
+localhost                           ansible_user=fabiom     ansible_connection=local    ansible_python_interpreter=/usr/bin/python3
+
+[brazil]
+cassandra-node[1:3].example.com     ansible_user=centos
+
+[amsterdam]
+cassandra-node[4:6].example.com     ansible_user=centos
+
+[cassandra:children]
+brazil
+amsterdam

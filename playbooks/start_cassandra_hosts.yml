@@ -1,0 +1,13 @@
+---
+- name: VM startup
+  hosts: localhost
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Start cassandra hosts
+      virt:
+        name: "{{ item }}"
+        state: running
+        uri: 'qemu+ssh://fabiom@fedora.example.com/system'
+      loop: "{{ groups['cassandra'] }}"

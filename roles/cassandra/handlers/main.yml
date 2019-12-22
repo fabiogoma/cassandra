@@ -1,0 +1,7 @@
+---
+- name: Reload systemd configuration and restart cassandra
+  systemd:
+    name: dse
+    state: restarted
+    enabled: true
+    daemon_reload: true

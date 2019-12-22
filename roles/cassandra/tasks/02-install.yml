@@ -1,0 +1,9 @@
+---
+- name: Install cassandra
+  yum:
+    name:
+      - dse-full-5.1.17-1
+      - dse-demos-5.1.17-1
+  register: install_cassandra_packages
+  until: install_cassandra_packages is not failed
+  retries: 5

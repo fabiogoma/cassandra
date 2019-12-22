@@ -1,0 +1,40 @@
+CREATE KEYSPACE killrvideo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3 }
+CREATE KEYSPACE killrvideo WITH replication = {'class': 'NetworkTopologyStrategy','brazil': 3,'amsterdam': 3 };
+
+
+USE killrvideo;
+
+CREATE TABLE videos(
+    video_id    uuid,
+    added_date  date,
+    title   text,
+    PRIMARY KEY (video_id)
+);
+
+COPY videos(video_id, added_date, title) FROM '/home/centos/labwork/data-files/videos.csv' WITH HEADER=TRUE;
+
+SELECT token(video_id), video_id FROM videos;
+
+--------------------------
+
+CREATE TABLE videos_by_tag(
+    tag         text,
+    video_id    uuid,
+    added_date  date,
+    title       text,
+    PRIMARY KEY((tag), video_id)
+);
+
+COPY videos_by_tag(tag, video_id, added_date, title) FROM '/home/centos/labwork/data-files/videos-by-tag.csv' WITH HEADER = TRUE;
+
+select token(tag), tag, video_id, added_date, title from videos_by_tag where tag='cassandra' ;
+
+-- NEVER USE ALLOW FILTERING
+select token(tag), tag, video_id, added_date, title from videos_by_tag where video_id=3452f7de-14bd-11e5-855e-8738355b7e3a ALLOW FILTERING;
+
+-- THIS IS HOW IT SHOULD BE DONE, the query shoul follow the model on yout PRIMARY KEY definition
+select * from videos_by_tag where tag='cassandra' AND video_id=3452f7de-14bd-11e5-855e-8738355b7e3a;
+
+nodetool getendpoints killrvideo videos_by_tag 'cassandra'
+
+nodetool getendpoints killrvideo videos_by_tag 'datastax'

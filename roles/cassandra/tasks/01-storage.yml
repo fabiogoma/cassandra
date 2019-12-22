@@ -1,0 +1,48 @@
+---
+- name: Create a primary partition
+  parted:
+    device: /dev/vdb
+    number: 1
+    state: present
+
+- name: Create a cassandra volume group
+  lvg:
+    vg: cassandra_vg
+    pvs: /dev/vdb1
+
+- name: Create a cassandra logical volume
+  lvol:
+    vg: cassandra_vg
+    lv: cassandra_lv
+    size: 100%FREE
+    state: present
+    shrink: false
+
+- name: Initialize logical volume
+  filesystem:
+    fstype: xfs
+    dev: /dev/cassandra_vg/cassandra_lv
+
+- name: Create mount point
+  file:
+    path: /var/lib/cassandra
+    owner: cassandra
+    group: cassandra
+    mode: 0755
+    state: directory
+
+- name: Mount cassandra file system
+  mount:
+    src: /dev/cassandra_vg/cassandra_lv
+    path: /var/lib/cassandra
+    fstype: xfs
+    opts: defaults
+    state: mounted
+
+- name: Enforce permissions after mount
+  file:
+    path: /var/lib/cassandra
+    owner: cassandra
+    group: cassandra
+    mode: 0755
+    state: directory

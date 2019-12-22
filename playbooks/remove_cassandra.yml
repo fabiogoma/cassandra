@@ -1,0 +1,21 @@
+---
+- name: Cassandra initial setup
+  hosts: cassandra
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Remove installed packages from datastax
+      yum:
+        name:
+          - dse.noarch
+          - dse-demos.noarch
+          - dse-full.noarch
+          - dse-libcassandra.noarch
+          - dse-libgraph.noarch
+          - dse-libhadoop2-client.noarch
+          - dse-liblog4j.noarch
+          - dse-libsolr.noarch
+          - dse-libspark.noarch
+          - dse-libtomcat.noarch
+        state: absent

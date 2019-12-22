@@ -1,0 +1,25 @@
+nodetool status
+dsetool status
+nodetool info
+nodetool describecluster
+nodetool getlogginglevels
+nodetool setlogginglevel org.apache.cassandra TRACE
+nodetool getlogginglevels
+nodetool setlogginglevel org.apache.cassandra DEBUG
+cat /var/log/cassandra/system.log 
+
+# Flush all data to disk, stop incoming writes. Used to stop node for maintenance.
+nodetool drain
+nodetool status
+nodetool stopdaemon
+nodetool status
+sudo systemctl restart dse
+cassandra-stress write n=50000 no-warmup -rate threads=1 -node 172.16.1.158
+
+# Flush all data to disk, allow new writes
+nodetool flush
+cqlsh
+history 
+history | awk '{print $1}'
+history | awk '{print $2}'
+history 

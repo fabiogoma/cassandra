@@ -1,0 +1,10 @@
+---
+- name: Ansible debug
+  hosts: cassandra
+  become: false
+  gather_facts: true
+
+  tasks:
+    - name: Debug
+      debug:
+        msg: "{{ group_names[0] }}"

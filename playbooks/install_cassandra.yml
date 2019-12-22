@@ -1,0 +1,10 @@
+---
+- name: Cassandra initial setup
+  hosts: cassandra
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Import cassandra role
+      import_role:
+        name: cassandra
