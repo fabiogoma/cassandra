@@ -8,7 +8,7 @@
     gpgcheck: no
   loop:
     - { name: 'grafana', description: 'Grafana YUM Repository', file: 'grafana', baseurl: 'https://packages.grafana.com/oss/rpm'}
-    - { name: 'influxdb', description: 'InfluxDB YUM Repository', file: 'influxdb', baseurl: 'https://repos.influxdata.com/rhel/\$releasever/\$basearch/stable'}
+    - { name: 'influxdb', description: 'InfluxDB YUM Repository', file: 'influxdb', baseurl: 'https://repos.influxdata.com/rhel/$releasever/$basearch/stable'}
 
 - name: Install dependecies
   yum:
