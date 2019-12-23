@@ -32,7 +32,7 @@
       - jemalloc
       - wget
       - unzip
-    state: latest
+    state: present
   register: install_dependecies_packages
   until: install_dependecies_packages is not failed
   retries: 5

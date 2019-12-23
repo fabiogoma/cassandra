@@ -22,7 +22,7 @@
       - unzip
       - initscripts
       - urw-fonts
-    state: latest
+    state: present
   register: install_dependecies_packages
   until: install_dependecies_packages is not failed
   retries: 5
@@ -30,7 +30,7 @@
 - name: Install Apache Web Server
   yum:
     name: "@web-server"
-    state: latest
+    state: present
   register: install_dependecies_packages
   until: install_dependecies_packages is not failed
   retries: 5

@@ -2,8 +2,10 @@
 - name: Install InfluxDB + Grafana
   yum:
     name:
+      - collectd
       - influxdb
       - grafana
+    state: present
   register: install_packages
   until: install_packages is not failed
   retries: 5

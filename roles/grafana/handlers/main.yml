@@ -1,0 +1,14 @@
+---
+- name: Reload systemd configuration and restart httpd
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: Reload systemd configuration and restart InfluxDB
+  systemd:
+    name: influxdb
+    state: restarted
+    enabled: true
+    daemon_reload: true
