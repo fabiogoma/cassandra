@@ -45,3 +45,8 @@ InfluxDB
 $ influx
 > use collectd;
 > show measurements;
+
+--------------------------------
+STRESS
+--------------------------------
+cassandra-stress write no-warmup cl=quorum duration=10m -rate threads=6 -node cassandra-node1.example.com,cassandra-node2.example.com,cassandra-node3.example.com,cassandra-node4.example.com,cassandra-node5.example.com,cassandra-node6.example.com
