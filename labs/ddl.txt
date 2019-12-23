@@ -38,3 +38,10 @@ select * from videos_by_tag where tag='cassandra' AND video_id=3452f7de-14bd-11e
 nodetool getendpoints killrvideo videos_by_tag 'cassandra'
 
 nodetool getendpoints killrvideo videos_by_tag 'datastax'
+
+--------------------------------
+InfluxDB
+--------------------------------
+$ influx
+> use collectd;
+> show measurements;
