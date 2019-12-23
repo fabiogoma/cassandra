@@ -1,0 +1,10 @@
+---
+- name: CollectD initial setup
+  hosts: cassandra
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Import CollectD role
+      import_role:
+        name: collectd

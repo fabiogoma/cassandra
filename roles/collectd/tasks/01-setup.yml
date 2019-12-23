@@ -1,12 +1,15 @@
 ---
 - name: Setup CollectD
   copy:
-    src: collectd.conf
-    dest: /etc/collectd.d/collectd.conf
+    src: "{{ item.file }}"
+    dest: "{{ item.path }}"
     owner: root
     group: root
     mode: 0644
   notify: Reload systemd configuration and restart CollectD
+  loop:
+    - { file: 'grafana.conf', path: '/etc/collectd.d/grafana.conf' } 
+    - { file: 'collectd.conf', path: '/etc/collectd.conf' } 
 
 - name: Ensure CollectD is up
   systemd:
