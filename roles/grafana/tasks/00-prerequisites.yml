@@ -22,6 +22,7 @@
       - unzip
       - initscripts
       - urw-fonts
+      - lsof
     state: present
   register: install_dependecies_packages
   until: install_dependecies_packages is not failed

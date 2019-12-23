@@ -1,0 +1,32 @@
+---
+- name: Set SELinux flag on and keep it persistent across reboots
+  seboolean:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    persistent: true
+  loop:
+    - { name: 'httpd_can_network_relay', state: true}
+    - { name: 'httpd_can_network_connect', state: true}
+
+- name: Enable firewall access
+  firewalld:
+    service: http
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Setup Apache Proxy
+  copy:
+    src: grafana.conf
+    dest: /etc/httpd/conf.d/grafana.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload systemd configuration and restart httpd
+
+- name: Ensure httpd is up
+  systemd:
+    name: httpd
+    state: started
+    enabled: true
+    daemon_reload: true

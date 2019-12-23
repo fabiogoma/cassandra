@@ -3,6 +3,7 @@
   firewalld:
     port: "{{ item }}"
     permanent: true
+    immediate: true
     state: enabled
   loop:
     - 8086/tcp

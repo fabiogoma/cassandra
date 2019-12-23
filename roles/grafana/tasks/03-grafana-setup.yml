@@ -1,0 +1,25 @@
+---
+- name: Load Grafana LDAP configuration from template
+  template:
+    src: ldap.toml.j2
+    dest: /etc/grafana/ldap.toml
+    owner: root
+    group: grafana
+    mode: 0640
+  notify: Reload systemd configuration and restart Grafana
+
+- name: Setup Grafana
+  copy:
+    src: grafana.ini
+    dest: /etc/grafana/grafana.ini
+    owner: root
+    group: grafana
+    mode: 0640
+  notify: Reload systemd configuration and restart Grafana
+  
+- name: Ensure grafana is up
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: true
+    daemon_reload: true
