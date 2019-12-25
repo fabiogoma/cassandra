@@ -1,0 +1,9 @@
+---
+- name: Install OpsCenter
+  yum:
+    name:
+      - opscenter
+    state: present
+  register: install_opscenter_packages
+  until: install_opscenter_packages is not failed
+  retries: 5

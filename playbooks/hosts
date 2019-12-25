@@ -13,3 +13,4 @@ netherlands
 
 [monitoring]
 grafana.example.com                 ansible_user=centos
+opscenter.example.com               ansible_user=centos

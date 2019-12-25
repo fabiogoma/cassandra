@@ -1,0 +1,88 @@
+---
+- name: Add datastax repository
+  yum_repository:
+    name: datastax
+    description: DataStax Repo for DataStax Enterprise
+    file: datastax
+    baseurl: https://rpm.datastax.com/enterprise
+    gpgcheck: no
+
+- name: Install dependecies
+  yum:
+    name:
+      - java-1.8.0-openjdk.x86_64
+      - mlocate
+      - bash-completion
+      - NetworkManager
+      - lvm2
+      - firewalld
+      - jemalloc
+      - wget
+      - unzip
+      - lsof
+    state: present
+  register: install_dependecies_packages
+  until: install_dependecies_packages is not failed
+  retries: 5
+
+- name: Install Apache Web Server
+  yum:
+    name: "@web-server"
+    state: present
+  register: install_dependecies_packages
+  until: install_dependecies_packages is not failed
+  retries: 5
+
+- name: Put services on desired state
+  systemd:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    enabled: "{{ item.enabled }}"
+  loop:
+    - { name: 'NetworkManager', state: 'started', enabled: true }
+    - { name: 'firewalld', state: 'started', enabled: true }
+
+- name: Setup kernel parameters
+  sysctl:
+    name: "{{ item.parameter }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    state: present
+    reload: true
+  loop:
+    - { parameter: 'net.ipv4.tcp_keepalive_time', value: '60' }
+    - { parameter: 'net.ipv4.tcp_keepalive_probes', value: '3' }
+    - { parameter: 'net.ipv4.tcp_keepalive_intvl', value: '10' }
+    - { parameter: 'net.core.rmem_max', value: '16777216' }
+    - { parameter: 'net.core.wmem_max', value: '16777216' }
+    - { parameter: 'net.core.rmem_default', value: '16777216' }
+    - { parameter: 'net.core.wmem_default', value: '16777216' }
+    - { parameter: 'net.core.optmem_max', value: '40960' }
+    - { parameter: 'net.ipv4.tcp_rmem', value: '4096 87380 16777216' }
+    - { parameter: 'net.ipv4.tcp_wmem', value: '4096 65536 16777216' }
+    - { parameter: 'vm.zone_reclaim_mode', value: '0' }
+    - { parameter: 'vm.swappiness', value: '1' }
+    - { parameter: 'vm.max_map_count', value: '1048575' }
+    
+- name: Cloud init template to remove FQDN from /etc/hosts
+  copy:
+    src: hosts.redhat.tmpl
+    dest: /etc/cloud/templates/hosts.redhat.tmpl
+    owner: root
+    group: root
+    mode: 0644
+  register: cloud_init_template_result
+
+- name: Reboot immediately if there was a change.
+  shell: "sleep 5 && reboot"
+  async: 1
+  poll: 0
+  when: cloud_init_template_result is changed
+
+- name: Wait for the reboot to complete if there was a change.
+  wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 5
+    timeout: 300
+  when: cloud_init_template_result is changed

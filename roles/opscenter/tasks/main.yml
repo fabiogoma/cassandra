@@ -1,0 +1,5 @@
+---
+- import_tasks: 00-prerequisites.yml
+- import_tasks: 01-install.yml
+- import_tasks: 02-setup.yml
+- import_tasks: 03-apache-setup.yml

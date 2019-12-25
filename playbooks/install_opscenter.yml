@@ -1,0 +1,14 @@
+---
+- name: OpsCenter initial setup
+  hosts: opscenter.example.com
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Import CollectD role
+      import_role:
+        name: collectd
+
+    - name: Import OpsCenter role
+      import_role:
+        name: opscenter

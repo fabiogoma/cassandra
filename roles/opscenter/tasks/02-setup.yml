@@ -1,0 +1,7 @@
+---
+- name: Ensure OpsCenter is up
+  systemd:
+    name: opscenterd
+    state: started
+    enabled: true
+    daemon_reload: true
