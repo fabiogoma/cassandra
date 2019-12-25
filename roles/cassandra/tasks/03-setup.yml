@@ -11,6 +11,15 @@
     - { template: 'cassandra.yaml.j2', path: '/etc/dse/cassandra/cassandra.yaml' }
     - { template: 'cassandra-rackdc.properties.j2', path: '/etc/dse/cassandra/cassandra-rackdc.properties' }
 
+- name: Enable remote JMX connection
+  copy:
+    src: cassandra-env.sh
+    dest: /etc/dse/cassandra/cassandra-env.sh
+    owner: cassandra
+    group: cassandra
+    mode: 0755
+  notify: Reload systemd configuration and restart cassandra
+
 - name: Ensure cassandra is up
   systemd:
     name: dse
