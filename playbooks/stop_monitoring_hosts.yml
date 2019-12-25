@@ -1,0 +1,13 @@
+---
+- name: VM shutdown
+  hosts: localhost
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Stop monitoring hosts
+      virt:
+        name: "{{ item }}"
+        state: shutdown
+        uri: 'qemu+ssh://fabiom@fedora.example.com/system'
+      loop: "{{ groups['monitoring'] }}"
