@@ -1,0 +1,13 @@
+---
+- name: Cassandra restart
+  hosts: cassandra
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Reload systemd configuration and restart cassandra
+      systemd:
+        name: dse
+        state: restarted
+        enabled: true
+        daemon_reload: true

@@ -1,0 +1,13 @@
+---
+- name: Cassandra stop
+  hosts: cassandra
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Reload systemd configuration and stop cassandra
+      systemd:
+        name: dse
+        state: stopped
+        enabled: true
+        daemon_reload: true

@@ -7,4 +7,4 @@
   tasks:
     - name: Debug
       debug:
-        msg: "{{ group_names[0] }}"
+        msg: "{{ group_names }}"
