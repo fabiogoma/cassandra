@@ -59,4 +59,4 @@ cassandra-stress write no-warmup cl=quorum duration=1m -rate threads=6 -node cas
 cassandra-stress write cl=quorum duration=1m -rate threads=6 -node cassandra-node1.example.com,cassandra-node2.example.com,cassandra-node3.example.com,cassandra-node4.example.com,cassandra-node5.example.com,cassandra-node6.example.com -graph file=HDD-Test.html title=HDD-Test revision=test1
 
 # STRESS WITH REPORT, CLEAN TABLE BEFORE START
-cassandra-stress write cl=quorum truncate=always duration=1m -rate threads=6 -node cassandra-node1.example.com,cassandra-node2.example.com,cassandra-node3.example.com,cassandra-node4.example.com,cassandra-node5.example.com,cassandra-node6.example.com -graph file=HDD-Test.html title=HDD-Test revision=test1
+cassandra-stress write cl=quorum duration=1m -rate threads=6 -node cassandra-node1.example.com,cassandra-node2.example.com,cassandra-node3.example.com,cassandra-node4.example.com,cassandra-node5.example.com,cassandra-node6.example.com -graph file=HDD-Test.html title=HDD-Test revision=test1
