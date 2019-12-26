@@ -8,7 +8,7 @@
     mode: 0644
   notify: Reload systemd configuration and restart CollectD
   loop:
-    - { file: 'grafana.conf', path: '/etc/collectd.d/grafana.conf' } 
+    - { file: 'grafana.conf', path: '/etc/collectd.d/grafana.conf' }
     - { file: 'collectd.conf', path: '/etc/collectd.conf' } 
 
 - name: Ensure CollectD is up
