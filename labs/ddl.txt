@@ -60,3 +60,19 @@ cassandra-stress write cl=quorum duration=1m -rate threads=6 -node cassandra-nod
 
 # STRESS WITH REPORT, CLEAN TABLE BEFORE START
 cassandra-stress write cl=quorum duration=1m -rate threads=6 -node cassandra-node1.example.com,cassandra-node2.example.com,cassandra-node3.example.com,cassandra-node4.example.com,cassandra-node5.example.com,cassandra-node6.example.com -graph file=HDD-Test.html title=HDD-Test revision=test1
+
+
+--------------------------------
+ADDING SSD AS CACHE
+--------------------------------
+partprobe
+
+pvcreate /dev/vdc1
+
+vgextend cassandra_vg /dev/vdc1
+
+lvcreate --type cache-pool -l 100%FREE -n cpool cassandra_vg /dev/vdc1
+
+lvconvert --type cache --cachepool cpool --cachemode writeback cassandra_vg/cassandra_lv
+
+lvs -a -o name,size,attr,devices cassandra_vg
