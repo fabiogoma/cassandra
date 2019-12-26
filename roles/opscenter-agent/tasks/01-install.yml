@@ -1,0 +1,9 @@
+---
+- name: Install OpsCenter Agent
+  yum:
+    name:
+      - datastax-agent
+    state: present
+  register: install_opscenter_packages
+  until: install_opscenter_packages is not failed
+  retries: 5

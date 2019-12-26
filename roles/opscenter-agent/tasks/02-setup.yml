@@ -1,0 +1,16 @@
+---
+- name: Configure OpsCenter Agent
+  copy:
+    src: address.yaml
+    dest: /var/lib/datastax-agent/conf/address.yaml
+    owner: cassandra
+    group: cassandra
+    mode: 0644
+  notify: Reload systemd configuration and restart OpsCenter Agent
+
+- name: Ensure OpsCenter Agent is up
+  systemd:
+    name: datastax-agent
+    state: started
+    enabled: true
+    daemon_reload: true

@@ -1,0 +1,8 @@
+---
+- name: Add datastax repository
+  yum_repository:
+    name: datastax
+    description: DataStax Repo for DataStax Enterprise
+    file: datastax
+    baseurl: https://rpm.datastax.com/enterprise
+    gpgcheck: no

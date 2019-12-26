@@ -1,0 +1,10 @@
+---
+- name: OpsCenter initial setup
+  hosts: cassandra
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Import OpsCenter Agent role
+      import_role:
+        name: opscenter-agent
