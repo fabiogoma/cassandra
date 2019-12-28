@@ -73,6 +73,13 @@ vgextend cassandra_vg /dev/vdc1
 
 lvcreate --type cache-pool -l 100%FREE -n cpool cassandra_vg /dev/vdc1
 
-lvconvert --type cache --cachepool cpool --cachemode writeback cassandra_vg/cassandra_lv
+lvconvert --type cache --cachepool cpool --cachemode writeback cassandra_vg/cassandra_lv -y
 
 lvs -a -o name,size,attr,devices cassandra_vg
+
+--------------------------------
+ROLLBACK (REMOVE) SSD AS CACHE
+--------------------------------
+lvconvert --uncache cassandra_vg/cassandra_lv -y
+vgreduce cassandra_vg /dev/vdc1
+pvremove /dev/vdc1
