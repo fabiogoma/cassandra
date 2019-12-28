@@ -1,6 +1,7 @@
 ---
 - name: Cassandra restart
   hosts: cassandra
+  serial: 1
   become: true
   gather_facts: false
 
